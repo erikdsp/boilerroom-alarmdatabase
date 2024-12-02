@@ -30,6 +30,8 @@ struct ProductType {
     std::string type_name;
 };
 
+
+
 int main() 
 {
     std::map<unsigned, Customer> companies;
