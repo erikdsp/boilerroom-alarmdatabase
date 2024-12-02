@@ -2,20 +2,40 @@
 #include <fstream>
 #include <cctype>
 #include <iostream>
+#include <map>
+#include <vector>
+
 using json = nlohmann::ordered_json;
 
-struct Contact {
-    int id;
-    std::string first_name;
-    std::string last_name;
-    int birth_year;
-    std::string email;
-    std::string phone;
+struct Customer {
+    std::string name;
+    std::string address;
+    std::vector<unsigned> users;
+    std::vector<Component> components;
 };
 
+struct User {
+    std::string pin;
+    std::string rfid;
+    std::string passphrase;
+};
+
+struct Component {
+    unsigned int type;
+    std::string location;
+    std::string serialnumber;
+};
+
+struct ProductType {
+    std::string type_name;
+};
 
 int main() 
 {
+    std::map<unsigned, Customer> companies;
+    std::map<unsigned, Component> components;
+    std::map<unsigned, User> users;  
+    std::map<unsigned, ProductType> product_type;
 
     return 0;
 }
