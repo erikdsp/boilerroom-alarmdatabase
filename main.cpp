@@ -33,7 +33,7 @@ int main()
     std::map<unsigned, Customer> companies;
     std::map<unsigned, Component> components;
     std::map<unsigned, User> users;  
-    std::map<unsigned, ComponentType> component_type;
+    std::map<unsigned, ComponentType> component_types;
     
     // Tests for create_user()
     // users.insert({{1}, User::create_user()});
