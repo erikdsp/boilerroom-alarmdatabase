@@ -26,7 +26,7 @@ struct Component {
     std::string serialnumber;
 };
 
-struct ProductType {
+struct ComponentType {
     std::string type_name;
 };
 
@@ -37,7 +37,7 @@ int main()
     std::map<unsigned, Customer> companies;
     std::map<unsigned, Component> components;
     std::map<unsigned, User> users;  
-    std::map<unsigned, ProductType> product_type;
+    std::map<unsigned, ComponentType> component_type;
 
     return 0;
 }
