@@ -1,4 +1,5 @@
 #include "nlohmann/json.hpp"
+#include "User.h"
 #include <fstream>
 #include <cctype>
 #include <iostream>
@@ -7,6 +8,12 @@
 
 using json = nlohmann::ordered_json;
 
+struct Component {
+    unsigned int type;
+    std::string location;
+    std::string serialnumber;
+};
+
 struct Customer {
     std::string name;
     std::string address;
@@ -14,17 +21,6 @@ struct Customer {
     std::vector<Component> components;
 };
 
-struct User {
-    std::string pin;
-    std::string rfid;
-    std::string passphrase;
-};
-
-struct Component {
-    unsigned int type;
-    std::string location;
-    std::string serialnumber;
-};
 
 struct ComponentType {
     std::string type_name;
@@ -38,10 +34,12 @@ int main()
     std::map<unsigned, Component> components;
     std::map<unsigned, User> users;  
     std::map<unsigned, ComponentType> component_type;
-
+    
+    // Tests for create_user()
+    // users.insert({{1}, User::create_user()});
+    // std::cout << users.at(1).pin;
     return 0;
 }
-
 
 
 
