@@ -1,0 +1,21 @@
+# Ignore files without extension
+*
+!/**/
+!*.*
+
+# Ignore Windows Binaries
+*.exe
+
+# Ignore some files and folders
+.DS_Store
+*.dSYM/
+
+# Ignore VS Code config folder
+.vscode/
+
+# Ignore .gitignore
+# .gitignore
+
+# Ignore temp folder
+temp/
+
