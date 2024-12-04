@@ -1,0 +1,5 @@
+# Exclude .vscode directory globally for this repo
+.vscode/
+
+# Exclude .exe files globally for this repo
+*.exe
