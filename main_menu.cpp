@@ -30,6 +30,7 @@ int submenu_types() {
 void main_menu()
 {
     JsonDatabase database;
+    ComponentType test_comp_type;
 
     std::string raw_input{};
     while(1)
@@ -41,11 +42,11 @@ void main_menu()
         {
             case 'a':
             {                        
-                add_menu(database);
+                add_menu(database, test_comp_type);
                 break;
                 }
             case 'p':
-                // readContacts(db);
+            print_menu(database, test_comp_type);
                 break;
             case 'u':
                 // updateContact(db);
@@ -63,14 +64,16 @@ void main_menu()
     // return 0;
 }
 
-void add_menu(JsonDatabase& database){
+void add_menu(JsonDatabase& database, ComponentType& test){
     std::string raw_input{};
     int menu_type { submenu_types() };
+    
     if (menu_type == CUSTOMER) {
         Customer temp_customer;   
         std::cout << "Create customer. (awaiting implementation)\n";
         std::cout << "Add customer. (awaiting implementation)\n";
         // database.add_customer();
+    
     } else if (menu_type == USER) {
         User temp_user;
         std::cout << "Create user. (awaiting implementation)\n";
@@ -94,11 +97,42 @@ void add_menu(JsonDatabase& database){
         }
         std::cout << "Add user. (awaiting implementation)\n";
         // database.add_user();
+    
     } else if (menu_type == COMPONENT_TYPE) {
-        ComponentType temp_comp_type;
-        create_component_type();
+        // ComponentType temp_comp_type;
+        test = create_component_type();
         std::cout << "Add component type. (awaiting implementation)\n";
         // database.add_component_type(temp_comp_type = create_component_type());             
+    
+    } else {
+        std::cout << "Not a valid menu option\n";
+    }
+}
+
+
+
+void print_menu(JsonDatabase& database, ComponentType& test){
+    std::string raw_input{};
+    int menu_type { submenu_types() };
+    
+    if (menu_type == CUSTOMER) {
+        std::cout << "Get customers. (awaiting implementation)\n";
+        std::cout << "Select customer -> ";
+        int customer_id { get_number() };
+        std::cout << "Print customer no " << customer_id << ". (awaiting implementation)\n";
+    
+    } else if (menu_type == USER) {
+        User temp_user;
+        std::cout << "Get users. (awaiting implementation)\n";
+        std::cout << "Select user -> ";
+        int user_id { get_number() };
+        std::cout << "Print user no " << user_id << ". (awaiting implementation)\n";
+    
+    } else if (menu_type == COMPONENT_TYPE) {
+        std::cout << "Get component types. (awaiting implementation)\n";
+        std::cout << "Print component types. (awaiting implementation)\n";
+        std::cout << "Test printing: " << test.type_name << "\n";
+    
     } else {
         std::cout << "Not a valid menu option\n";
     }

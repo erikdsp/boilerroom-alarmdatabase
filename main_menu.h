@@ -13,7 +13,7 @@ enum menu_type {
 
 int submenu_types();
 void main_menu();
-void add_menu(JsonDatabase& database);
-
+void add_menu(JsonDatabase& database, ComponentType& test);
+void print_menu(JsonDatabase& database, ComponentType& test);
 
 #endif
