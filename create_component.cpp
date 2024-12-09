@@ -2,7 +2,7 @@
 
 Component create_component(){
     Component temp;
-    std::cout << "Please enter the component type -> ";
+    std::cout << "Please enter the component type (unsigned number) -> ";
     temp.type = get_unsigned_number();
     std::cout << "Please enter the location -> ";
     temp.location = get_string();

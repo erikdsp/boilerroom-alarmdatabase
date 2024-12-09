@@ -19,8 +19,6 @@ int main()
     std::map<unsigned, User> users;  
     std::map<unsigned, ComponentType> component_types;
     
-    std::cout << get_unsigned_number() << "\n";
-
     return 0;
 }
 
