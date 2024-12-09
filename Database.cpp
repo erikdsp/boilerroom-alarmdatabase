@@ -9,7 +9,43 @@ void to_json( json& j, const Component& c ){
     };
 }
 
-json& JsonDatabase::load_file(std::string file_name){
+void to_json( json& j, const Customer& cus ){
+    j = json{
+        "name", cus.name,
+        "address", cus.address,
+        "users", cus.users,
+        "components", cus.components
+    };
+}
+
+void to_json( json& j, const User& u ){
+    j = json{
+        "pin", u.pin,
+        "rfid", u.rfid,
+        "passphrase", u.passphrase
+    };
+}
+
+void from_json( json& j, ComponentType& c_t ){
+    j.at("type_name").get_to(c_t.type_name);
+}
+
+void from_json( json& j, Customer& cus ){
+    j.at("name").get_to(cus.name);
+    j.at("address").get_to(cus.address);
+    j.at("users").get_to(cus.users);
+    for (const auto& comp : j.at("components")){
+        cus.components.push_back(Component{comp});
+    }
+}
+
+void from_json( json& j, User& u ){
+    j.at("pin").get_to(u.pin);
+    j.at("rfid").get_to(u.rfid);
+    j.at("passphrase").get_to(u.passphrase);
+}
+
+json& JsonDatabase::load_file(std::string file_name) const{
     json records;
 
     std::ifstream in_file;
@@ -27,7 +63,7 @@ json& JsonDatabase::load_file(std::string file_name){
     return records;
 }
 
-void save_file( std::string file_name, const json& out ){
+void JsonDatabase::save_file( std::string file_name, const json& out ) const{
     std::ofstream out_file;
     out_file.exceptions(std::ofstream::badbit | std::ofstream::failbit);
     try{
@@ -49,10 +85,7 @@ void JsonDatabase::add_user( User& new_user ){
 
     records.push_back({
         "id", id,
-        "data", 
-            "pin", new_user.pin,
-            "rfid", new_user.rfid,
-            "passphrase", new_user.passphrase
+        "data", new_user
     });
 
     save_file(UserDatabase, records);
@@ -81,23 +114,37 @@ void JsonDatabase::add_customer( Customer& new_customer ){
     records.push_back({
         "id", id,
         "data", 
-            "name", new_customer.name,
-            "address", new_customer.address,
-            "users", new_customer.users,
-            "components", new_customer.components
+            new_customer
     });
 
     save_file(CustomerDatabase, records);
 }
 
+const Customer& JsonDatabase::register_user_to_customer(unsigned user_id, unsigned customer_id ) const {
+    json records = load_file(CustomerDatabase);
+    records.at(customer_id)["data"]["users"].push_back(user_id);
+    save_file(CustomerDatabase, records);
+
+    records = load_file(CustomerDatabase);
+    return Customer{records.at(customer_id)};
+}
+
 const std::map<unsigned, User> JsonDatabase::get_users() const{
     json records = load_file(UserDatabase);
     std::map<unsigned, User> users;
-    
+
+    for ( const auto & row : records ){
+        users.insert({{row["id"]}, {row["data"]} });
+    }
 
     return users;
 }
 
+const User& JsonDatabase::get_user(unsigned id) const{
+    json records = load_file(UserDatabase);
+
+    return User {records.at(id)};
+}
 
 const std::vector<unsigned> JsonDatabase::get_component_types(){
     json records = load_file(ComponentDatabase);
@@ -109,5 +156,16 @@ const std::vector<unsigned> JsonDatabase::get_component_types(){
     std::sort(ids.begin(), ids.end());
 
     return ids;
+}
+
+const User& JsonDatabase::update_user( unsigned id, User updated_user){
+    json records = load_file(UserDatabase);
+    records.at(id) = updated_user;
+
+    save_file(UserDatabase, records);
+
+    records = load_file(UserDatabase);
+
+    return User {records.at(id)};
 }
 

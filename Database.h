@@ -24,6 +24,8 @@ class JsonDatabase{
     void add_component_type ( ComponentType& );
     void add_customer ( Customer& );
 
+    const Customer& register_user_to_customer( unsigned user_id, unsigned customer_id ) const;
+    
     const std::map<unsigned, User>get_users() const;
     const User& get_user(unsigned id) const;
 
@@ -31,6 +33,8 @@ class JsonDatabase{
     const ComponentType& get_component_type(unsigned id);
 
     const User& update_user( unsigned id, User updated_user );
+
+
 };
 
 #endif
