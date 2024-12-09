@@ -34,6 +34,8 @@ int submenu_types() {
 
 void main_menu()
 {
+
+
     std::string raw_input{};
     while(1)
     {
@@ -64,6 +66,7 @@ void main_menu()
                 // removeContact(db);
                 break;
             case 'q':
+                return;
                 // return 0;
             default:
             ;
