@@ -12,7 +12,7 @@ Component create_component(){
 }
 
 
-ComponentType create_component_type(){
+ComponentType create_component_type() {
     ComponentType temp;
     std::cout << "Please enter name of component type -> ";
     temp.type_name = get_string();

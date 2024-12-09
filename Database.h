@@ -3,6 +3,7 @@
 
 #include <map>
 #include <numeric>
+#include <algorithm>
 #include "nlohmann/json.hpp"
 #include "User.h"
 #include "structs.h"
@@ -15,7 +16,7 @@ class JsonDatabase{
     std::string CustomerDatabase {"customers.json"};
     std::string ComponentDatabase {"components.json"}; 
 
-    json& load_file(std::string) const;
+    json load_file(std::string) const;
     void save_file(std::string, const json& out) const;
 
     public:

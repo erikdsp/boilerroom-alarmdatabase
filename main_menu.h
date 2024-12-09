@@ -3,16 +3,17 @@
 #include "User.h"
 #include "structs.h"
 #include "create_component.h"
+#include "Database.h"
 
 enum menu_type {
     CUSTOMER = 1,
     USER,
-    COMPONENT,
     COMPONENT_TYPE
 };
 
 int submenu_types();
 void main_menu();
+void add_menu(JsonDatabase& database);
 
 
 #endif

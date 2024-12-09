@@ -27,25 +27,25 @@ void to_json( json& j, const User& u ){
 }
 
 void from_json( json& j, ComponentType& c_t ){
-    j.at("type_name").get_to(c_t.type_name);
+    // j.at("type_name").get_to(c_t.type_name);
 }
 
 void from_json( json& j, Customer& cus ){
-    j.at("name").get_to(cus.name);
-    j.at("address").get_to(cus.address);
-    j.at("users").get_to(cus.users);
-    for (const auto& comp : j.at("components")){
-        cus.components.push_back(Component{comp});
-    }
+    // j.at("name").get_to(cus.name);
+    // j.at("address").get_to(cus.address);
+    // j.at("users").get_to(cus.users);
+    // for (const auto& comp : j.at("components")){
+    //     cus.components.push_back(Component{comp});
+    // }
 }
 
 void from_json( json& j, User& u ){
-    j.at("pin").get_to(u.pin);
-    j.at("rfid").get_to(u.rfid);
-    j.at("passphrase").get_to(u.passphrase);
+    // j.at("pin").get_to(u.pin);
+    // j.at("rfid").get_to(u.rfid);
+    // j.at("passphrase").get_to(u.passphrase);
 }
 
-json& JsonDatabase::load_file(std::string file_name) const{
+json JsonDatabase::load_file(std::string file_name) const{
     json records;
 
     std::ifstream in_file;
@@ -72,7 +72,8 @@ void JsonDatabase::save_file( std::string file_name, const json& out ) const{
         std::cerr << e.what() << '\n';
     }
 
-    out >> out_file;
+    // out >> out_file;
+    out_file << out;
 
     out_file.close();
 
@@ -81,7 +82,8 @@ void JsonDatabase::save_file( std::string file_name, const json& out ) const{
 void JsonDatabase::add_user( User& new_user ){  
     json records {load_file(UserDatabase)};
     int id {1};
-    id = std::max(id, records.back()["id"]+1);
+    int db_id {records.back()["id"]};
+    id = std::max(id, db_id+1);
 
     records.push_back({
         "id", id,
@@ -94,7 +96,8 @@ void JsonDatabase::add_user( User& new_user ){
 void JsonDatabase::add_component_type( ComponentType& new_component_type ){
     json records {load_file(ComponentDatabase)};
     int id {1};
-    id = std::max(id, records.back()["id"]+1);
+    int db_id { records.back()["id"] };
+    id = std::max(id, db_id+1);
 
     records.push_back({
         "id", id,
@@ -107,7 +110,8 @@ void JsonDatabase::add_component_type( ComponentType& new_component_type ){
 void JsonDatabase::add_customer( Customer& new_customer ){  
     json records {load_file(CustomerDatabase)};
     int id {1};
-    id = std::max(id, records.back()["id"]+1);
+    int db_id {records.back()["id"]};
+    id = std::max(id, db_id+1);
 
     std::vector<unsigned> ;
 
@@ -150,10 +154,10 @@ const std::vector<unsigned> JsonDatabase::get_component_types(){
     json records = load_file(ComponentDatabase);
     std::vector<unsigned> ids {};
 
-    for (const auto & r : records){
-        ids.push_back(r["id"].get<unsigned>());
-    }
-    std::sort(ids.begin(), ids.end());
+    // for (const auto & r : records){
+    //     ids.push_back(r["id"].get<unsigned int>());
+    // }
+    // std::sort(ids.begin(), ids.end());
 
     return ids;
 }
