@@ -1,3 +1,6 @@
+# Exclude .vscode directory globally for this repo
+.vscode/
+
 # Ignore files without extension
 *
 !/**/
@@ -18,4 +21,3 @@
 
 # Ignore temp folder
 temp/
-
