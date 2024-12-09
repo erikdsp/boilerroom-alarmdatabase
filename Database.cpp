@@ -168,4 +168,3 @@ const User& JsonDatabase::update_user( unsigned id, User updated_user){
 
     return User {records.at(id)};
 }
-
