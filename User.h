@@ -1,3 +1,6 @@
+#ifndef DATABASE_USER_H
+#define DATABASE_USER_H
+
 #include <fstream>
 #include <cctype>
 #include <iostream>
@@ -12,6 +15,7 @@ public:
     static User create_user();
 };
  
+/*  
 User User::create_user(){
 
     User temp_user;
@@ -25,3 +29,6 @@ User User::create_user(){
 
     return temp_user;
 }
+ */
+
+#endif

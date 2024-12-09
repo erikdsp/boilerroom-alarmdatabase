@@ -1,3 +1,6 @@
+#ifndef DATABASE_STRUCTS_H
+#define DATABASE_STRUCTS_H
+
 #include <vector>
 #include <string>
 
@@ -18,3 +21,5 @@ struct Customer {
 struct ComponentType {
     std::string type_name;
 };
+
+#endif
