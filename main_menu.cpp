@@ -1,10 +1,5 @@
 #include "main_menu.h"
 
-enum menu_type {
-    COMPONENT = 1,
-    COMPONENT_TYPE,
-    CUSTOMER
-};
 
 
 int submenu_types() {
@@ -19,11 +14,13 @@ int submenu_types() {
         char c = raw_input.at(0);
         switch(c) {
             case '1':
-                return COMPONENT;
-            case '2':
-                return COMPONENT_TYPE;
-            case '3':
                 return CUSTOMER;
+            case '2':
+                return USER;
+            case '3':
+                return COMPONENT;
+            case '4':
+                return COMPONENT_TYPE;
             default:
             std::cout << "Invalid input\n";
         }
@@ -47,12 +44,14 @@ void main_menu()
             case 'a':
                 int menu_type { submenu_types() };
                 switch(menu_type){
-                    case COMPONENT:
-                    break;
-                    case COMPONENT_TYPE:
-                    break;
                     case CUSTOMER:
-                    break;
+                        break;
+                    case USER:
+                        break;
+                    case COMPONENT:
+                        break;
+                    case COMPONENT_TYPE:
+                        break;
                     default:
                 }
                 break;
