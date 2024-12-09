@@ -11,7 +11,7 @@ public:
     std::string passphrase;
     static User create_user();
 };
- 
+/* 
 User User::create_user(){
 
     User temp_user;
@@ -25,3 +25,4 @@ User User::create_user(){
 
     return temp_user;
 }
+*/

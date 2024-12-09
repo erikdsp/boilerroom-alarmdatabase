@@ -3,26 +3,26 @@
 
 void to_json( json& j, const Component& c ){
     j = json{
-        "type", c.type,
-        "location", c.location,
-        "serialnumber", c.serialnumber
+        {"type", c.type},
+        {"location", c.location},
+        {"serialnumber", c.serialnumber}
     };
 }
 
 void to_json( json& j, const Customer& cus ){
     j = json{
-        "name", cus.name,
-        "address", cus.address,
-        "users", cus.users,
-        "components", cus.components
+        {"name", cus.name},
+        {"address", cus.address},
+        {"users", cus.users},
+        {"components", cus.components}
     };
 }
 
 void to_json( json& j, const User& u ){
     j = json{
-        "pin", u.pin,
-        "rfid", u.rfid,
-        "passphrase", u.passphrase
+        {"pin", u.pin},
+        {"rfid", u.rfid},
+        {"passphrase", u.passphrase}
     };
 }
 
@@ -45,8 +45,7 @@ void from_json( json& j, User& u ){
     j.at("passphrase").get_to(u.passphrase);
 }
 
-json& JsonDatabase::load_file(std::string file_name) const{
-    json records;
+void JsonDatabase::load_file(std::string file_name, json& to) const{
 
     std::ifstream in_file;
     in_file.exceptions(std::ofstream::badbit | std::ofstream::failbit);
@@ -56,11 +55,10 @@ json& JsonDatabase::load_file(std::string file_name) const{
         std::cerr << e.what() << '\n';
     }
 
-    in_file >> records;
+    in_file >> to;
 
     in_file.close();
 
-    return records;
 }
 
 void JsonDatabase::save_file( std::string file_name, const json& out ) const{
@@ -72,29 +70,39 @@ void JsonDatabase::save_file( std::string file_name, const json& out ) const{
         std::cerr << e.what() << '\n';
     }
 
-    out >> out_file;
+    out_file << out;
 
     out_file.close();
-
 }
 
 void JsonDatabase::add_user( User& new_user ){  
-    json records {load_file(UserDatabase)};
+    json records;
+    load_file(UserDatabase, records);
     int id {1};
-    id = std::max(id, records.back()["id"]+1);
+    std::cerr << records.dump() << '\n';
+    int prev{records.back().back().get<int>()};
 
-    records.push_back({
-        "id", id,
-        "data", new_user
-    });
+    id = std::max(id, prev+1);
+
+    json user_data{
+        {"id", id},
+        {"data", new_user}
+    };
+
+    std::cerr << user_data.dump() << '\n';
+
+    records.push_back(user_data);
+
+    std::cerr << records.dump() << '\n';
 
     save_file(UserDatabase, records);
 }
 
 void JsonDatabase::add_component_type( ComponentType& new_component_type ){
-    json records {load_file(ComponentDatabase)};
+    json records;
+    load_file(ComponentDatabase, records);
     int id {1};
-    id = std::max(id, records.back()["id"]+1);
+    id = std::max(id, records.back()["id"].get<int>()+1);
 
     records.push_back({
         "id", id,
@@ -105,11 +113,10 @@ void JsonDatabase::add_component_type( ComponentType& new_component_type ){
 }
 
 void JsonDatabase::add_customer( Customer& new_customer ){  
-    json records {load_file(CustomerDatabase)};
+    json records;
+    load_file(CustomerDatabase, records);
     int id {1};
-    id = std::max(id, records.back()["id"]+1);
-
-    std::vector<unsigned> ;
+    id = std::max(id, records.back()["id"].get<int>()+1);
 
     records.push_back({
         "id", id,
@@ -120,34 +127,42 @@ void JsonDatabase::add_customer( Customer& new_customer ){
     save_file(CustomerDatabase, records);
 }
 
-const Customer& JsonDatabase::register_user_to_customer(unsigned user_id, unsigned customer_id ) const {
-    json records = load_file(CustomerDatabase);
+const Customer JsonDatabase::register_user_to_customer(unsigned user_id, unsigned customer_id ) const {
+    json records;
+    load_file(CustomerDatabase, records);
     records.at(customer_id)["data"]["users"].push_back(user_id);
     save_file(CustomerDatabase, records);
 
-    records = load_file(CustomerDatabase);
+    load_file(CustomerDatabase, records);
     return Customer{records.at(customer_id)};
 }
 
 const std::map<unsigned, User> JsonDatabase::get_users() const{
-    json records = load_file(UserDatabase);
+    json records;
+    load_file(UserDatabase, records);
     std::map<unsigned, User> users;
 
-    for ( const auto & row : records ){
-        users.insert({{row["id"]}, {row["data"]} });
+    std::cerr << "Getting: " << records.dump() << '\n';
+    for ( auto & row : records ){
+        std::cerr << "  Object: " << row << '\n';
+        std::cerr << "    ID: " << row.value("id", 0) << '\n';
+        std::cerr << "    Data:" << row << '\n';
+        users.insert({{row.value("id", 0U)}, {} });
     }
 
     return users;
 }
 
-const User& JsonDatabase::get_user(unsigned id) const{
-    json records = load_file(UserDatabase);
+const User JsonDatabase::get_user(unsigned id) const{
+    json records;
+    load_file(UserDatabase, records);
 
     return User {records.at(id)};
 }
 
 const std::vector<unsigned> JsonDatabase::get_component_types(){
-    json records = load_file(ComponentDatabase);
+    json records;
+    load_file(ComponentDatabase, records);
     std::vector<unsigned> ids {};
 
     for (const auto & r : records){
@@ -158,14 +173,15 @@ const std::vector<unsigned> JsonDatabase::get_component_types(){
     return ids;
 }
 
-const User& JsonDatabase::update_user( unsigned id, User updated_user){
-    json records = load_file(UserDatabase);
+const User JsonDatabase::update_user( unsigned id, User updated_user){
+    json records;
+    load_file(UserDatabase, records);
     records.at(id) = updated_user;
 
     save_file(UserDatabase, records);
 
-    records = load_file(UserDatabase);
+    load_file(UserDatabase, records);
 
+    
     return User {records.at(id)};
 }
-
