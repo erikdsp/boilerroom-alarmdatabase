@@ -9,6 +9,12 @@
 
 #include "structs.h"
 
+/* NAMESPACE::INPUT
+USAGE GUIDE:
+Usage illustration on how to use namespace::input can be seen below.
+Q: Why?
+A: This should be much easier to implement error-checking or bounds-checking in the future.
+*/
 namespace input
 {
     static int get(int& value, const std::string& prompt)
@@ -27,7 +33,7 @@ namespace input
         return value;
     }
 
-    static unsigned int get(unsigned int& value, const std::string& prompt)
+    static uint32_t get(uint32_t& value, const std::string& prompt)
     {
         std::cout << prompt;
         std::cin >> value;
@@ -43,10 +49,19 @@ namespace input
     }
 };
 
+/* NAMESPACE::CUSTOMER
+USAGE GUIDE:
+All functions included and visible at declaration.
+Q: What is "runs"? 
+A: Number of test customers you want to simulate.
+Q: Namespace? 
+A: Avoids potential naming conflicts as well as provides a "rudimentary" interface for all included functionality.
+*/
 namespace customer
 {
     void customer_print(std::map<uint32_t, Customer>& companies);
     void customer_create(std::map<uint32_t, Customer>& companies);
+    void customer_delete(std::map<uint32_t, Customer>& companies);
     void test_customer_create(std::map<uint32_t, Customer>& companies, uint32_t runs);
     void test_fill_customer_create(std::map<uint32_t, Customer>& companies, uint32_t runs);
 
