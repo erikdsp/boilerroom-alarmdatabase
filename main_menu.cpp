@@ -31,11 +31,12 @@ void main_menu()
 {
     JsonDatabase database;
     ComponentType test_comp_type;
+    std::string_view test_phrase { "Totte och Knotte" };
 
     std::string raw_input{};
     while(1)
     {
-        std::cout << "Press a to add, p to print, u to update, r to remove, q to quit -> ";        
+        std::cout << "Press a to add, p to print, u to update, r to remove, t to test alarm, q to quit -> ";        
         std::getline(std::cin, raw_input);
         char c = raw_input.at(0);
         switch(c)
@@ -46,13 +47,16 @@ void main_menu()
                 break;
                 }
             case 'p':
-            print_menu(database, test_comp_type);
+                print_menu(database, test_comp_type);
                 break;
             case 'u':
-                // updateContact(db);
+                std::cout << "Update menu awaiting implementation\n";
                 break;
             case 'r':
-                // removeContact(db);
+                std::cout << "Remove menu awaiting implementation\n";
+                break;
+            case 't':
+                test_menu(database, test_phrase);
                 break;
             case 'q':
                 return;
@@ -136,4 +140,26 @@ void print_menu(JsonDatabase& database, ComponentType& test){
     } else {
         std::cout << "Not a valid menu option\n";
     }
+}
+
+
+void test_menu(JsonDatabase& database, std::string_view test){
+        std::string raw_input{};
+        
+        User temp_user;
+        std::cout << "Get users. (awaiting implementation)\n";
+        std::cout << "Select user (1-5) -> ";
+        int user_id { get_number(1, 5) };
+        std::cout << "Print user no " << user_id << ". (awaiting implementation)\n";
+        std::cout << "Test alarm started. \n";
+        while (1) {
+            std::cout << "Pass phrase: " << test << "\n"
+                      << "Press y to confirm -> ";
+            raw_input = get_string();
+            char c = raw_input.at(0);
+            if (c == 'y') {
+                std::cout << "Pass phrase confirmed\n";
+                break;
+            }
+        }
 }

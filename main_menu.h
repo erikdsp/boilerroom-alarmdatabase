@@ -15,5 +15,6 @@ int submenu_types();
 void main_menu();
 void add_menu(JsonDatabase& database, ComponentType& test);
 void print_menu(JsonDatabase& database, ComponentType& test);
+void test_menu(JsonDatabase& database, std::string_view test);
 
 #endif

@@ -16,13 +16,7 @@
 
 int main() 
 {
-    std::map<unsigned, Customer> companies;
-    std::map<unsigned, Component> components;
-    std::map<unsigned, User> users;  
-    std::map<unsigned, ComponentType> component_types;
-    
     main_menu();    
-
 
     return 0;
 }
