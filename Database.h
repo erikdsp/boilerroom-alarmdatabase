@@ -51,9 +51,6 @@ class JsonDatabase{
     const User& update_user( unsigned id, User updated_user );
 };
 
-JsonDatabase::JsonDatabase(){
-    
-};
 
 
 #endif
