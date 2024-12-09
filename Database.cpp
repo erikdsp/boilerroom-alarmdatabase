@@ -90,6 +90,15 @@ void JsonDatabase::add_customer( Customer& new_customer ){
     save_file(CustomerDatabase, records);
 }
 
+const std::map<unsigned, User> JsonDatabase::get_users() const{
+    json records = load_file(UserDatabase);
+    std::map<unsigned, User> users;
+    
+
+    return users;
+}
+
+
 const std::vector<unsigned> JsonDatabase::get_component_types(){
     json records = load_file(ComponentDatabase);
     std::vector<unsigned> ids {};
@@ -101,3 +110,4 @@ const std::vector<unsigned> JsonDatabase::get_component_types(){
 
     return ids;
 }
+

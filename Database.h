@@ -8,23 +8,6 @@
 #include "structs.h"
 
 using json = nlohmann::json;
-/*
-UserDatabase udb;
-CustomerDatabase cdb;
-ComponentDatabase compdb;
-
-Database db; <-- insert name, pin, loc into users;
-
-register_user();
-enter username: dfgjdfjklsd
-User{dfgjdfjklsd} >> db;
-
-
-*/
-
-
-
-
 
 class JsonDatabase{
     private: 
@@ -32,11 +15,10 @@ class JsonDatabase{
     std::string CustomerDatabase {"customers.json"};
     std::string ComponentDatabase {"components.json"}; 
 
-    json& load_file(std::string);
-    void save_file(std::string, const json& out);
+    json& load_file(std::string) const;
+    void save_file(std::string, const json& out) const;
 
     public:
-    JsonDatabase();
 
     void add_user ( User& );
     void add_component_type ( ComponentType& );
@@ -50,10 +32,5 @@ class JsonDatabase{
 
     const User& update_user( unsigned id, User updated_user );
 };
-
-JsonDatabase::JsonDatabase(){
-    
-};
-
 
 #endif
