@@ -34,6 +34,23 @@ int get_number()
     return -1;  // error
 }
 
+// function to get a number in a range using getline
+int get_number(int min, int max)
+{
+    while (1)
+    {
+        std::string raw_in{ get_string() };
+
+        if (is_int(raw_in)) {
+            int num { stoi(raw_in) };
+            if (num >= min && num <= max) return num;
+        }         
+        std::cout << "Invalid input. Please enter a number in range " << min << "-" << max << " -> ";
+    }
+    return -1;  // error
+}
+
+
 // function to get a number using getline
 unsigned get_unsigned_number()
 {

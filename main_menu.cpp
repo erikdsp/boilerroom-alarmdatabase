@@ -124,8 +124,8 @@ void print_menu(JsonDatabase& database, ComponentType& test){
     } else if (menu_type == USER) {
         User temp_user;
         std::cout << "Get users. (awaiting implementation)\n";
-        std::cout << "Select user -> ";
-        int user_id { get_number() };
+        std::cout << "Select user (1-5) -> ";
+        int user_id { get_number(1, 5) };
         std::cout << "Print user no " << user_id << ". (awaiting implementation)\n";
     
     } else if (menu_type == COMPONENT_TYPE) {
