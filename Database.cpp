@@ -1,5 +1,14 @@
 #include "Database.h"
 
+
+void to_json( json& j, const Component& c ){
+    j = json{
+        "type", c.type,
+        "location", c.location,
+        "serialnumber", c.serialnumber
+    };
+}
+
 json& JsonDatabase::load_file(std::string file_name){
     json records;
 
@@ -19,7 +28,7 @@ json& JsonDatabase::load_file(std::string file_name){
 }
 
 void save_file( std::string file_name, const json& out ){
-        std::ofstream out_file;
+    std::ofstream out_file;
     out_file.exceptions(std::ofstream::badbit | std::ofstream::failbit);
     try{
         out_file.open(file_name);
@@ -67,6 +76,7 @@ void JsonDatabase::add_customer( Customer& new_customer ){
     int id {1};
     id = std::max(id, records.back()["id"]+1);
 
+    std::vector<unsigned> ;
 
     records.push_back({
         "id", id,
