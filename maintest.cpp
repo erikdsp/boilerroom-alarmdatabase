@@ -1,20 +1,8 @@
-#include <fstream>
-#include <cctype>
-#include <iostream>
-#include <map>
-#include <vector>
-#include <cstdlib>
-#include <numeric>
+#include "User.h"
 
-class User {
-public:
-    std::string pin;
-    std::string rfid;
-    std::string passphrase;
-    static User create_user();
-};
- 
-User User::create_user(){
+
+// TESTER
+User create_user(){
 
     std::srand(time(NULL));
     User temp_user;
@@ -37,8 +25,14 @@ User User::create_user(){
     } while(temp_user.pin.size() != 4);
     
     std::cout << "\nRFID: " << temp_user.rfid; 
-    std::cout << "\nEnter desired passphrase: ";
+    std::cout << "\nEnter desired passphrase (question and anwser): ";
     std::getline(std::cin, temp_user.passphrase);
 
     return temp_user;
+}
+
+// Main for testing 
+int main () 
+{
+    create_user();
 }
