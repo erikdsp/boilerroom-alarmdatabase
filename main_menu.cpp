@@ -44,7 +44,7 @@ void main_menu()
             case 'a':
             {            
                 // create_user();            
-                // add_menu(database, test_comp_type);
+                add_menu(database, test_comp_type);
                 break;
                 }
             case 'p':
