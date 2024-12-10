@@ -32,7 +32,7 @@ void main_menu()
     JsonDatabase database;
     ComponentType test_comp_type;
     std::string_view test_phrase { "Totte och Knotte" };
-
+    
     std::string raw_input{};
     while(1)
     {
@@ -42,8 +42,9 @@ void main_menu()
         switch(c)
         {
             case 'a':
-            {                        
-                add_menu(database, test_comp_type);
+            {            
+                // create_user();            
+                // add_menu(database, test_comp_type);
                 break;
                 }
             case 'p':

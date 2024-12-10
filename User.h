@@ -1,3 +1,6 @@
+#ifndef ALARM_USER_DATABASE_H
+#define ALARM_USER_DATABASE_H
+
 #include <fstream>
 #include <cctype>
 #include <iostream>
@@ -14,3 +17,6 @@ public:
     static User create_user();
 };
  
+
+
+#endif
