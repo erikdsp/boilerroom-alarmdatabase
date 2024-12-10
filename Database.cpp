@@ -79,7 +79,6 @@ void JsonDatabase::add_user( User& new_user ){
     json records;
     load_file(UserDatabase, records);
     int id {1};
-    std::cerr << records.dump() << '\n';
     int prev{records.back().back().get<int>()};
 
     id = std::max(id, prev+1);
@@ -88,12 +87,7 @@ void JsonDatabase::add_user( User& new_user ){
         {"id", id},
         {"data", new_user}
     };
-
-    std::cerr << user_data.dump() << '\n';
-
     records.push_back(user_data);
-
-    std::cerr << records.dump() << '\n';
 
     save_file(UserDatabase, records);
 }
@@ -142,12 +136,10 @@ const std::map<unsigned, User> JsonDatabase::get_users() const{
     load_file(UserDatabase, records);
     std::map<unsigned, User> users;
 
-    std::cerr << "Getting: " << records.dump() << '\n';
     for ( auto & row : records ){
-        std::cerr << "  Object: " << row << '\n';
-        std::cerr << "    ID: " << row.value("id", 0) << '\n';
-        std::cerr << "    Data:" << row << '\n';
-        users.insert({{row.value("id", 0U)}, {} });
+        User u {row["data"]["pin"], row["data"]["rfid"], row["data"]["passphrase"]};
+        unsigned user_id = {row.value("id", 0U)};
+        users.emplace(user_id, u);
     }
 
     return users;
@@ -182,6 +174,5 @@ const User JsonDatabase::update_user( unsigned id, User updated_user){
 
     load_file(UserDatabase, records);
 
-    
     return User {records.at(id)};
 }
