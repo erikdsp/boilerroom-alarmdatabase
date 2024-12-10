@@ -1,25 +1,12 @@
-#include "nlohmann/json.hpp"
-#include "Database.h"
-#include "main_menu.h"
-#include "User.h"
-#include "structs.h"
-#include "create_component.h"
-#include <fstream>
-#include <cctype>
+#include "SqlDatabase.h"
 #include <iostream>
-#include <map>
-#include <vector>
 
-// using json = nlohmann::ordered_json;
-
-
-
-int main() 
+int main()
 {
-    main_menu();    
+    ComponentType t {"Sensor"};
+    SqlDatabase db("test2.db");
+    // db.add_component_type(t);
+    db.print_component_types();
 
     return 0;
 }
-
-
-
