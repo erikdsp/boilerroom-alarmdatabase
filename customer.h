@@ -8,33 +8,33 @@
 
 #include "structs.h"
 
-/* NAMESPACE::INPUT
-USAGE GUIDE:
-Usage illustration on how to use namespace::input can be seen below.
-This should make it easier to implement error-checking or bounds-checking
+/* Usage in other implementations:
+input::get("PromptOutput", valueToReturn);
+input::get("PromptOutput");
 */
 namespace input
 {
-    static int get(int& value, const std::string& prompt)
+    static int get(const std::string& prompt, int& value)
     {
         std::cout << prompt;
         std::cin >> value;
-        std::cin.ignore();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         return value;
     }
 
-    static double get(double& value, const std::string& prompt)
+    static double get(const std::string& prompt, double& value)
     {
         std::cout << prompt;
         std::cin >> value;
-        std::cin.ignore();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         return value;
     }
 
-    static unsigned int get(unsigned int& value, const std::string& prompt)
+    static unsigned int get(const std::string& prompt, unsigned int& value)
     {
         std::cout << prompt;
         std::cin >> value;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         return value;
     }
 
@@ -47,10 +47,12 @@ namespace input
     }
 };
 
-/* NAMESPACE::CUSTOMER
-USAGE GUIDE:
-All functions included and visible at declaration
-What is "runs"? A: Number of test customers you want to simulate
+/* Usage in other implementations:
+customer::customer_print(std::map<uint32_t, Customer>& YourMap);
+customer::customer_create(std::map<uint32_t, Customer>& YourMap);
+customer::customer_delete(std::map<uint32_t, Customer>& YourMap);
+customer::test_customer_create(std::map<uint32_t, Customer>& YourMap);
+customer::test_fill_customer_create(std::map<uint32_t, Customer>& YourMap, NmbrOfTestCustomersToAdd);
 */
 namespace customer
 {
@@ -65,7 +67,7 @@ namespace customer
         std::cout << "List of companies:\n";
         for (const auto& [id, customer] : companies)
         {
-            std::cout << "Company ID: " << id << "\n";
+            std::cout << "\nCompany ID: " << id << "\n";
             std::cout << "Name: " << customer.name << "\n";
             std::cout << "Company Address: " << customer.address << "\n";
             std::cout << "Company Users: ";
@@ -73,6 +75,7 @@ namespace customer
             {
                 std::cout << user << " ";
             }
+            std::cout << std::endl;
         }
     }
 
@@ -83,16 +86,16 @@ namespace customer
         {
             ++i;
         }
-        companies[i].name = input::get("\nEnter customer name: ");
-        companies[i].address = input::get("\nEnter customer address: ");
-        unsigned int users_to_add = input::get(users_to_add, "\nEnter amount of users for this customer: ");
+        companies[i].name = input::get("Enter customer name: ");
+        companies[i].address = input::get("Enter customer address: ");
+        unsigned int users_to_add = input::get("Enter amount of users: ", users_to_add);
         companies[i].users.push_back(users_to_add);
     }
 
     void customer_delete(std::map<unsigned int, Customer>& companies)
     {
         unsigned int id = 0;
-        id = input::get(id, "\nInput ID of customer to be deleted: ");
+        id = input::get("\nInput ID of customer to be deleted: ", id);
         if (companies.find(id) != companies.end())
         {
             companies.erase(id);
