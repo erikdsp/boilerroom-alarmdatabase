@@ -148,8 +148,12 @@ const std::map<unsigned, User> JsonDatabase::get_users() const{
 const User JsonDatabase::get_user(unsigned id) const{
     json records;
     load_file(UserDatabase, records);
-
-    return User {records.at(id)};
+    auto found = std::find_if(records.begin(), records.end(), [id](const auto& json){
+        return json.at("id") == id;
+    });
+    std::cerr << *found;
+    auto j = *found;
+    return User {j["data"]["pin"], j["data"]["rfid"], j["data"]["passphrase"]};
 }
 
 const std::vector<unsigned> JsonDatabase::get_component_types(){
