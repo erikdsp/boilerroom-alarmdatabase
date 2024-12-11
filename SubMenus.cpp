@@ -93,10 +93,10 @@ void print_menu(SqlDatabase& database){
         std::cout << "Print user no " << user_id << ". (awaiting implementation)\n";
     
     } else if (menu_type == COMPONENT_TYPE) {
-        std::cout << "Get component types. (awaiting implementation)\n";
-        std::cout << "Print component types. (awaiting implementation)\n";
-        std::cout << "Test printing: " << database.get_last_inserted_rowid() << "\n";
-    
+        database.print("SELECT * FROM component_type;");
+        // std::cout << "Get component types. (awaiting implementation)\n";
+        // std::cout << "Print component types. (awaiting implementation)\n";
+        // std::cout << "Test printing: " << database.get_last_inserted_rowid() << "\n";
     } else {
         std::cout << "Not a valid menu option\n";
     }

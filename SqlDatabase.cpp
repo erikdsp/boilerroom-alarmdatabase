@@ -182,8 +182,7 @@ int SqlDatabase::print_callback(void *data, int argc, char **arg_value, char **a
     return 0;
 }
 
-void SqlDatabase::print_component_types(){
-    std::string sql = "SELECT * FROM component_type;";
+void SqlDatabase::print(const std::string& sql){
     execute_sql_with_callback(sql, "");
 }
 

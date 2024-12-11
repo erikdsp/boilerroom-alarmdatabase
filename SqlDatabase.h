@@ -37,7 +37,7 @@ class SqlDatabase{
     void add_customer( const Customer& cu );
     int select_key( const std::string& sql );
     int get_last_inserted_rowid();
-    void print_component_types();
+    void print(const std::string& sql);
     // @param keys for keys from query, @param sql - syntax example: SELECT id, <parameter> FROM <table>
     void get_valid_keys_with_print(std::set<int>& keys, const std::string& sql);
 
