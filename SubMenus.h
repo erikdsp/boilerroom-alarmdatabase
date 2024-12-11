@@ -12,7 +12,6 @@ enum menu_type {
 };
 
 int submenu_types();
-void main_menu(const char* filename);
 void add_menu(SqlDatabase& database);
 void print_menu(SqlDatabase& database);
 void test_menu(SqlDatabase& database);
