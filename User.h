@@ -6,6 +6,8 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <cstdlib>
+#include <numeric>
 
 class User {
 public:
@@ -15,20 +17,5 @@ public:
     static User create_user();
 };
  
-/*  
-User User::create_user(){
-
-    User temp_user;
-    
-    std::cout << "\nPlease enter desired pin:";
-    std::getline(std::cin, temp_user.pin);
-    std::cout << "\nPlease enter desired rfid:";
-    std::getline(std::cin, temp_user.rfid);
-    std::cout << "\nPlease enter desired passphrase:";
-    std::getline(std::cin, temp_user.passphrase);
-
-    return temp_user;
-}
- */
 
 #endif
