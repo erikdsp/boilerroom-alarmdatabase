@@ -67,6 +67,14 @@ void SqlDatabase::execute_sql_with_callback(const std::string& sql, const std::s
     }
 }
 
+
+ComponentType SqlDatabase::create_component_type() {
+    ComponentType temp;
+    std::cout << "Please enter name of component type -> ";
+    temp.type_name = get_string();
+    return std::move(temp);
+}
+
 Component SqlDatabase::create_component(){
     Component temp;
     std::cout << "Available Component Types:\n";
@@ -143,7 +151,7 @@ int SqlDatabase::select_key(const std::string& sql) {
     while (invalid) {
         input = get_number();
         if ((invalid = (customer_keys.count(input) == 0))) {
-            std::cout << "Please select an option from the list -> ";
+            std::cout << "Please select an option from the list or 0) to abort  -> ";
         }
     }
     return input;
@@ -170,7 +178,7 @@ int SqlDatabase::print_callback(void *data, int argc, char **arg_value, char **a
     for (int i = 0; i < argc; i++) {
         std::cout << az_col_name[i] << ": " << (arg_value[i] ? arg_value[i] : "NULL") << "\n";
     }
-    std::cout << "\n";
+    // std::cout << "\n";
     return 0;
 }
 

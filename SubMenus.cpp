@@ -1,4 +1,4 @@
-#include "main_menu.h"
+#include "SubMenus.h"
 
 
 
@@ -27,11 +27,9 @@ int submenu_types() {
 
 }
 
-void main_menu()
+void main_menu(const char* filename)
 {
-    JsonDatabase database;
-    ComponentType test_comp_type;
-    std::string_view test_phrase { "Totte och Knotte" };
+    SqlDatabase database(filename);
 
     std::string raw_input{};
     while(1)
@@ -43,11 +41,11 @@ void main_menu()
         {
             case 'a':
             {                        
-                add_menu(database, test_comp_type);
+                add_menu(database);
                 break;
                 }
             case 'p':
-                print_menu(database, test_comp_type);
+                print_menu(database);
                 break;
             case 'u':
                 std::cout << "Update menu awaiting implementation\n";
@@ -56,7 +54,7 @@ void main_menu()
                 std::cout << "Remove menu awaiting implementation\n";
                 break;
             case 't':
-                test_menu(database, test_phrase);
+                test_menu(database);
                 break;
             case 'q':
                 return;
@@ -68,7 +66,7 @@ void main_menu()
     // return 0;
 }
 
-void add_menu(JsonDatabase& database, ComponentType& test){
+void add_menu(SqlDatabase& database){
     std::string raw_input{};
     int menu_type { submenu_types() };
     
@@ -89,7 +87,7 @@ void add_menu(JsonDatabase& database, ComponentType& test){
             char c2 = raw_input.at(0);
                 switch (c2) {
                     case '+':
-                        create_component();
+                        database.create_component();
                         break;
                     case '0':
                         submenu = false;
@@ -104,7 +102,7 @@ void add_menu(JsonDatabase& database, ComponentType& test){
     
     } else if (menu_type == COMPONENT_TYPE) {
         // ComponentType temp_comp_type;
-        test = create_component_type();
+        ComponentType test = database.create_component_type();
         std::cout << "Add component type. (awaiting implementation)\n";
         // database.add_component_type(temp_comp_type = create_component_type());             
     
@@ -115,13 +113,13 @@ void add_menu(JsonDatabase& database, ComponentType& test){
 
 
 
-void print_menu(JsonDatabase& database, ComponentType& test){
+void print_menu(SqlDatabase& database){
     std::string raw_input{};
     int menu_type { submenu_types() };
     
     if (menu_type == CUSTOMER) {
-        std::cout << "Get customers. (awaiting implementation)\n";
-        std::cout << "Select customer -> ";
+        std::cout << "Print customers. (awaiting implementation)\n";
+        std::cout << "Select customer to print detailed information or press 0) to exit -> ";
         int customer_id { get_number() };
         std::cout << "Print customer no " << customer_id << ". (awaiting implementation)\n";
     
@@ -135,7 +133,7 @@ void print_menu(JsonDatabase& database, ComponentType& test){
     } else if (menu_type == COMPONENT_TYPE) {
         std::cout << "Get component types. (awaiting implementation)\n";
         std::cout << "Print component types. (awaiting implementation)\n";
-        std::cout << "Test printing: " << test.type_name << "\n";
+        std::cout << "Test printing: " << database.get_last_inserted_rowid() << "\n";
     
     } else {
         std::cout << "Not a valid menu option\n";
@@ -143,7 +141,7 @@ void print_menu(JsonDatabase& database, ComponentType& test){
 }
 
 
-void test_menu(JsonDatabase& database, std::string_view test){
+void test_menu(SqlDatabase& database){
         std::string raw_input{};
         
         User temp_user;
@@ -153,7 +151,7 @@ void test_menu(JsonDatabase& database, std::string_view test){
         std::cout << "Print user no " << user_id << ". (awaiting implementation)\n";
         std::cout << "Test alarm started. \n";
         while (1) {
-            std::cout << "Pass phrase: " << test << "\n"
+            std::cout << "Pass phrase: " << temp_user.passphrase << "\n"
                       << "Press y to confirm -> ";
             raw_input = get_string();
             char c = raw_input.at(0);

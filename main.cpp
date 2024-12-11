@@ -1,25 +1,43 @@
 #include "SqlDatabase.h"
+#include "SubMenus.h"
 #include <iostream>
 
 int main()
 {
-    ComponentType t {"Sensor"};
-    SqlDatabase db("alarms.db");
-    // db.add_component_type(t);
-    // std::cout << db.get_last_inserted_rowid() << "\n";
-    // db.print_component_types();
-    // db.select_key("SELECT id, name FROM customer;");
-    // db.create_component();
-    // User test_user { User::create_user() };
-    // db.add_user(test_user);
-    db.add_component( db.create_component() );
-    
-    // std::cout << hej.pin << " " << hej.rfid << " " << hej.passphrase << "\n";
-    // std::set<int> valid_keys{};
-    // db.get_valid_keys_with_print(valid_keys, "SELECT id, type_name FROM component_type;");
-    // for (auto key : valid_keys) {
-    //     std::cout << key << "\n";
-    // }
+    SqlDatabase database("alarms.db");
+    std::string raw_input{};
+
+    while(1)
+    {
+        std::cout << "Press a to add, p to print, u to update, r to remove, t to test alarm, q to quit -> ";        
+        std::getline(std::cin, raw_input);
+        char c = raw_input.at(0);
+        switch(c)
+        {
+            case 'a':
+            {                        
+                add_menu(database);
+                break;
+                }
+            case 'p':
+                print_menu(database);
+                break;
+            case 'u':
+                std::cout << "Update menu awaiting implementation\n";
+                break;
+            case 'r':
+                std::cout << "Remove menu awaiting implementation\n";
+                break;
+            case 't':
+                test_menu(database);
+                break;
+            case 'q':
+                return 0;
+            default:
+            ;
+        }
+    }
+
 
 
     return 0;

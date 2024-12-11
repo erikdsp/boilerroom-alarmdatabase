@@ -1,7 +1,6 @@
 #ifndef CHAS_BOILER_ALARM_SQL_DATABASE_H
 #define CHAS_BOILER_ALARM_SQL_DATABASE_H
 
-#include "nlohmann/json.hpp"
 #include "User.h"
 #include "structs.h"
 #include "input.h"
@@ -30,7 +29,7 @@ class SqlDatabase{
     SqlDatabase(const char* db_name);
     ~SqlDatabase();
 
-    // void add_user ( User& );
+    ComponentType create_component_type();
     Component create_component();
     void add_component_type ( const ComponentType& ct);
     void add_component( const Component& c );
@@ -39,21 +38,8 @@ class SqlDatabase{
     int select_key( const std::string& sql );
     int get_last_inserted_rowid();
     void print_component_types();
-    // SELECT id, <parameter> FROM <table>
+    // @param keys for keys from query, @param sql - syntax example: SELECT id, <parameter> FROM <table>
     void get_valid_keys_with_print(std::set<int>& keys, const std::string& sql);
-    // void select_component_type();
-    // void add_customer ( Customer& );
-
-    // const Customer register_user_to_customer( unsigned user_id, unsigned customer_id ) const;
-    
-    // const std::map<unsigned, User>get_users() const;
-    // const User get_user(unsigned id) const;
-
-    // const std::vector<unsigned> get_component_types();
-    // const ComponentType get_component_type(unsigned id);
-
-    // const User update_user( unsigned id, User updated_user );
-
 
 };
 
