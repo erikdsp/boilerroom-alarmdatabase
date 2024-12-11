@@ -88,21 +88,28 @@ void SqlDatabase::add_component_type ( ComponentType& ct){
 
  void SqlDatabase::add_component( Component& c ){
     std::string sql = "INSERT INTO component (type_id, location, serialnumber) VALUES ('" 
-                 + std::to_string(c.type) + "', " + c.location + "', " + c.serialnumber + "');";
+                 + std::to_string(c.type) + "', '" + c.location + "', '" + c.serialnumber + "');";
     std::string message = "Component added to database";
     execute_sql(sql, message);
  }
 
 void SqlDatabase::add_user( User& u ){
+    std::cout << "Select a customer to add user:\n";
+    int customer {select_key( "SELECT id, name FROM customer;") };
     std::string sql = "INSERT INTO user (pin, rfid, passphrase) VALUES ('" 
-                 + u.pin + "', " + u.rfid + "', " + u.passphrase + "');";
-    std::string message = "User added to database";
+                 + u.pin + "', '" + u.rfid + "', '" + u.passphrase + "');";
+    std::string message = "";
+    execute_sql(sql, message);
+    int user { get_last_inserted_rowid() };
+    sql = "INSERT INTO user_customer (customer_id, user_id) VALUES ('"
+            + std::to_string(customer) + "', '" + std::to_string(user) + "');";
+    message = "User added to database";
     execute_sql(sql, message);
  }
 
 void SqlDatabase::add_customer( Customer& cu ){
     std::string sql = "INSERT INTO customer (name, address) VALUES ('" 
-                 + cu.name + "', " + cu.name + "');";
+                 + cu.name + "', '" + cu.address + "');";
     std::string message = "Customer " + cu.name + " added to database";
     execute_sql(sql, message);
 }
