@@ -73,6 +73,47 @@ void SqlDatabase::add_component_type ( ComponentType& ct){
     execute_sql(sql, message);
 }
 
+ void SqlDatabase::add_component( Component& c ){
+    std::string sql = "INSERT INTO component (type_id, location, serialnumber) VALUES ('" 
+                 + std::to_string(c.type) + "', " + c.location + "', " + c.serialnumber + "');";
+    std::string message = "Component added to database";
+    execute_sql(sql, message);
+ }
+
+void SqlDatabase::add_user( User& u ){
+    std::string sql = "INSERT INTO user (pin, rfid, passphrase) VALUES ('" 
+                 + u.pin + "', " + u.rfid + "', " + u.passphrase + "');";
+    std::string message = "User added to database";
+    execute_sql(sql, message);
+ }
+
+void SqlDatabase::add_customer( Customer& cu ){
+    std::string sql = "INSERT INTO customer (name, address) VALUES ('" 
+                 + cu.name + "', " + cu.name + "');";
+    std::string message = "Customer " + cu.name + " added to database";
+    execute_sql(sql, message);
+}
+
+
+int SqlDatabase::select_customer(){
+    return 0;
+}
+
+int SqlDatabase::get_last_inserted_rowid(){
+    std::string sql = "SELECT last_insert_rowid();";
+    sqlite3_stmt* stmt = nullptr;
+    int rowid{};
+    if (sqlite3_prepare_v2(database, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "SQL error: " << sqlite3_errmsg(database) << "\n";
+    } else {
+        // read values for each row
+        while (sqlite3_step(stmt) == SQLITE_ROW) {            
+            rowid = sqlite3_column_int(stmt, 0);
+        }
+    }
+    sqlite3_finalize(stmt);
+    return rowid;
+}
 
 int SqlDatabase::print_callback(void *data, int argc, char **arg_value, char **az_col_name){
     std::cout << "--------------------------------------------------------------------------------------------\n";
