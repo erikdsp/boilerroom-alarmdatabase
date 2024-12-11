@@ -1,6 +1,10 @@
 #ifndef CHAS_BOILER_ALARM_SQL_DATABASE_H
 #define CHAS_BOILER_ALARM_SQL_DATABASE_H
 
+#include "nlohmann/json.hpp"
+#include "User.h"
+#include "structs.h"
+#include "input.h"
 #include <map>
 #include <numeric>
 #include <iostream>
@@ -12,9 +16,6 @@
 #include <vector>
 #include <map>
 #include <set>
-#include "nlohmann/json.hpp"
-#include "User.h"
-#include "structs.h"
 
 
 class SqlDatabase{
@@ -30,16 +31,17 @@ class SqlDatabase{
     ~SqlDatabase();
 
     // void add_user ( User& );
+    Component create_component();
     void add_component_type ( ComponentType& ct);
     void add_component( Component& c );
     void add_user( User& u );
     void add_customer( Customer& cu );
-    int select_customer();
+    int select_key( const std::string& sql );
     int get_last_inserted_rowid();
     void print_component_types();
     // SELECT id, <parameter> FROM <table>
     void get_valid_keys_with_print(std::set<int>& keys, const std::string& sql);
-    void select_ct();
+    // void select_component_type();
     // void add_customer ( Customer& );
 
     // const Customer register_user_to_customer( unsigned user_id, unsigned customer_id ) const;

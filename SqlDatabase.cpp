@@ -67,6 +67,19 @@ void SqlDatabase::execute_sql_with_callback(const std::string& sql, const std::s
     }
 }
 
+Component SqlDatabase::create_component(){
+    Component temp;
+    std::cout << "Available Component Types:\n";
+    int component_type {select_key( "SELECT id, type_name FROM component_type;") };
+    temp.type = component_type;
+    std::cout << "Please enter the location -> ";
+    temp.location = get_string();
+    std::cout << "Please enter the serial number -> ";
+    temp.serialnumber = get_string();
+    return std::move(temp);
+}
+
+
 void SqlDatabase::add_component_type ( ComponentType& ct){
     std::string sql = "INSERT INTO component_type (type_name) VALUES ('" + ct.type_name + "');";
     std::string message = "Component type " + ct.type_name + " added to database";
@@ -95,17 +108,21 @@ void SqlDatabase::add_customer( Customer& cu ){
 }
 
 
-int SqlDatabase::select_customer() {
+int SqlDatabase::select_key(const std::string& sql) {
     int input{};
     std::set<int> customer_keys;
-    get_valid_keys_with_print(customer_keys, "SELECT id, name FROM customer;");
-    std::cout << "Available customers:\n";
+    // example sql: SELECT id, name FROM customer;
+    get_valid_keys_with_print(customer_keys, sql);
+    // std::cout << "Available options:\n";
     std::cout << "Please select -> ";
-    do {
-
-    } while (customer_keys.count(input) != 0 );
-
-    return 0;
+    bool invalid{true};
+    while (invalid) {
+        input = get_number();
+        if ((invalid = (customer_keys.count(input) == 0))) {
+            std::cout << "Please select an option from the list -> ";
+        }
+    }
+    return input;
 }
 
 int SqlDatabase::get_last_inserted_rowid(){
@@ -162,7 +179,8 @@ void SqlDatabase::get_valid_keys_with_print(std::set<int>& keys, const std::stri
     sqlite3_finalize(stmt);
 }
 
-void SqlDatabase::select_ct() {
+/* 
+void SqlDatabase::select_component_type() {
     std::set<int> keys;
     std::vector<std::map<int, std::string>> component_types;
     sqlite3_stmt* stmt = nullptr;
@@ -186,6 +204,7 @@ void SqlDatabase::select_ct() {
         // std::cout << "CT1: " << component_types.size() << "\n";
     }
 }
+ */
 
 // Select data within a time range
 /* 
