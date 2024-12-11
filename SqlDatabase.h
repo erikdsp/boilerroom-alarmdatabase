@@ -9,6 +9,9 @@
 #include <fstream>
 #include <string>
 #include <regex>
+#include <vector>
+#include <map>
+#include <set>
 #include "nlohmann/json.hpp"
 #include "User.h"
 #include "structs.h"
@@ -29,6 +32,8 @@ class SqlDatabase{
     // void add_user ( User& );
     void add_component_type ( ComponentType& ct);
     void print_component_types();
+    void get_valid_keys_with_print(std::set<int>& keys, const std::string& sql);
+    void select_ct();
     // void add_customer ( Customer& );
 
     // const Customer register_user_to_customer( unsigned user_id, unsigned customer_id ) const;

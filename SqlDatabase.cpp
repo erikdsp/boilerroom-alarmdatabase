@@ -63,7 +63,7 @@ void SqlDatabase::execute_sql_with_callback(const std::string& sql, const std::s
         std::cerr << "SQL error: " << errMsg << std::endl;
         sqlite3_free(errMsg);
     } else {
-        std::cout << success_message;
+        std::cout << success_message << std::endl;
     }
 }
 
@@ -79,11 +79,78 @@ int SqlDatabase::print_callback(void *data, int argc, char **arg_value, char **a
     for (int i = 0; i < argc; i++) {
         std::cout << az_col_name[i] << ": " << (arg_value[i] ? arg_value[i] : "NULL") << "\n";
     }
+    std::cout << "\n";
     return 0;
 }
 
 void SqlDatabase::print_component_types(){
     std::string sql = "SELECT * FROM component_type;";
-    execute_sql_with_callback(sql);
-    std::cout << "--------------------------------------------------------------------------------------------\n";
+    execute_sql_with_callback(sql, "");
 }
+
+void SqlDatabase::get_valid_keys_with_print(std::set<int>& keys, const std::string& sql){        
+    sqlite3_stmt* stmt = nullptr;
+
+    if (sqlite3_prepare_v2(database, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "SQL error: " << sqlite3_errmsg(database) << "\n";
+    } else {
+        // read values for each row
+        while (sqlite3_step(stmt) == SQLITE_ROW) {            
+            int key = sqlite3_column_int(stmt, 0);
+            const char* value_cstr = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+            // insert for caller to use
+            keys.insert(key);
+            // print
+            std::cout << key << ") " << value_cstr << "\n";
+        }
+    }
+    sqlite3_finalize(stmt);
+}
+
+void SqlDatabase::select_ct() {
+    std::set<int> keys;
+    std::vector<std::map<int, std::string>> component_types;
+    sqlite3_stmt* stmt = nullptr;
+    std::string sql = "SELECT id, type_name FROM component_type;";
+
+        if (sqlite3_prepare_v2(database, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+            std::cerr << "SQL error: " << sqlite3_errmsg(database) << "\n";
+            sqlite3_finalize(stmt);
+        } else {
+            while (sqlite3_step(stmt) == SQLITE_ROW) {            
+                std::map<int, std::string> row;
+                int key = sqlite3_column_int(stmt, 0);
+                keys.insert(key);
+                const char* p_to_value = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+                std::string value { (p_to_value != NULL) ? p_to_value : "null" };
+                row.insert({key, value});
+                component_types.push_back(row);
+            }
+        sqlite3_finalize(stmt);
+        // std::cout << keys.count(4) << "\n";
+        // std::cout << "CT1: " << component_types.size() << "\n";
+    }
+}
+
+// Select data within a time range
+/* 
+bool select_time_range(sqlite3* db, vector<map<string, int>>& time_ref, const string& start_time, const string& end_time) {
+    sqlite3_stmt* stmt = nullptr;
+    string sql = "SELECT * FROM EventLog WHERE event_time >= '" + start_time + "' AND event_time <= '" + end_time + "';";
+
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
+            map<string, int> row;
+            const char* time_text = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+            int value = sqlite3_column_int(stmt, 2);
+
+            row[time_text] = value;
+            time_ref.push_back(row);
+        }
+        sqlite3_finalize(stmt);
+        return true;
+    }
+    sqlite3_finalize(stmt);
+    return false;
+}
+ */
