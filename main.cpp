@@ -10,8 +10,10 @@ int main()
     // db.print_component_types();
     // db.select_key("SELECT id, name FROM customer;");
     // db.create_component();
-    User test_user { User::create_user() };
-    db.add_user(test_user);
+    // User test_user { User::create_user() };
+    // db.add_user(test_user);
+    db.add_component( db.create_component() );
+    
     // std::cout << hej.pin << " " << hej.rfid << " " << hej.passphrase << "\n";
     // std::set<int> valid_keys{};
     // db.get_valid_keys_with_print(valid_keys, "SELECT id, type_name FROM component_type;");
