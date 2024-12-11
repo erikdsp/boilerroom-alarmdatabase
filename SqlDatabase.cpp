@@ -183,6 +183,13 @@ int SqlDatabase::print_callback(void *data, int argc, char **arg_value, char **a
 }
 
 void SqlDatabase::print(const std::string& sql){
+    // validate sql     TODO: learn how to match case insensitive
+    std::regex e(R"(^SELECT)");             // Regular expression pattern for SELECT
+    int valid = std::regex_search(sql, e);  // Search the string against the regex
+    if (!valid) {
+        std::cerr << "Invalid SQL SELECT\n";
+        return;
+    }    
     execute_sql_with_callback(sql, "");
 }
 
