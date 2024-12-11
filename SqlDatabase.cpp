@@ -63,7 +63,7 @@ void SqlDatabase::execute_sql_with_callback(const std::string& sql, const std::s
         std::cerr << "SQL error: " << errMsg << std::endl;
         sqlite3_free(errMsg);
     } else {
-        std::cout << success_message << std::endl;
+        std::cout << success_message;
     }
 }
 
@@ -79,11 +79,11 @@ int SqlDatabase::print_callback(void *data, int argc, char **arg_value, char **a
     for (int i = 0; i < argc; i++) {
         std::cout << az_col_name[i] << ": " << (arg_value[i] ? arg_value[i] : "NULL") << "\n";
     }
-    std::cout << "\n";
     return 0;
 }
 
 void SqlDatabase::print_component_types(){
     std::string sql = "SELECT * FROM component_type;";
-    execute_sql_with_callback(sql, "");
+    execute_sql_with_callback(sql);
+    std::cout << "--------------------------------------------------------------------------------------------\n";
 }

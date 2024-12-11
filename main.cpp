@@ -3,7 +3,7 @@
 
 int main()
 {
-    ComponentType t {"Sensor"};
+    ComponentType t {"Motion Sensor"};
     SqlDatabase db("test2.db");
     // db.add_component_type(t);
     db.print_component_types();
