@@ -95,7 +95,16 @@ void SqlDatabase::add_customer( Customer& cu ){
 }
 
 
-int SqlDatabase::select_customer(){
+int SqlDatabase::select_customer() {
+    int input{};
+    std::set<int> customer_keys;
+    get_valid_keys_with_print(customer_keys, "SELECT id, name FROM customer;");
+    std::cout << "Available customers:\n";
+    std::cout << "Please select -> ";
+    do {
+
+    } while (customer_keys.count(input) != 0 );
+
     return 0;
 }
 
@@ -136,7 +145,12 @@ void SqlDatabase::get_valid_keys_with_print(std::set<int>& keys, const std::stri
         std::cerr << "SQL error: " << sqlite3_errmsg(database) << "\n";
     } else {
         // read values for each row
-        while (sqlite3_step(stmt) == SQLITE_ROW) {            
+        while (sqlite3_step(stmt) == SQLITE_ROW) {      
+            // check that SQL query matches types INTEGER, TEXT
+            if (sqlite3_column_type(stmt, 0) != SQLITE_INTEGER || sqlite3_column_type(stmt, 1) != SQLITE3_TEXT ) {
+                std::cerr << "error, wrong SQL query to get_valid_keys_with_print\n";
+                break;                
+            }      
             int key = sqlite3_column_int(stmt, 0);
             const char* value_cstr = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
             // insert for caller to use

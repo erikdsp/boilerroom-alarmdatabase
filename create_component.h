@@ -2,16 +2,11 @@
 #define CREATE_COMPONENT_H
 #include "User.h"
 #include "structs.h"
+#include "input.h"
 #include <regex>
 
 Component create_component();
 ComponentType create_component_type();
 
-int get_number();
-int get_number(int min, int max);
-unsigned get_unsigned_number();
-std::string get_string();
-bool is_int(const std::string &str);
-bool is_unsigned_int(const std::string &str);
 
 #endif
