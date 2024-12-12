@@ -38,6 +38,7 @@ class SqlDatabase{
     int select_key( const std::string& sql );
     int get_last_inserted_rowid();
     void print(const std::string& sql);
+    std::string get_string_from_database(const std::string& sql);
     // @param keys for keys from query, @param sql - syntax example: SELECT id, <parameter> FROM <table>
     void get_valid_keys_with_print(std::set<int>& keys, const std::string& sql);
 

@@ -195,6 +195,28 @@ void SqlDatabase::print(const std::string& sql){
     execute_sql_with_callback(sql, "");
 }
 
+std::string SqlDatabase::get_string_from_database(const std::string& sql) {
+    sqlite3_stmt* stmt = nullptr;
+    std::string text;
+    if (sqlite3_prepare_v2(database, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "SQL error: " << sqlite3_errmsg(database) << "\n";
+    } else {
+        // read values for each row
+        while (sqlite3_step(stmt) == SQLITE_ROW) {      
+            // check that SQL query matches type TEXT
+            if (sqlite3_column_type(stmt, 0) != SQLITE3_TEXT ) {
+                std::cerr << "error, wrong SQL query to get_valid_keys_with_print\n";
+                break;                
+            }      
+            // const char* raw_text = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+            // text = raw_text;
+            text = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+        }
+    }
+    sqlite3_finalize(stmt);
+    return text;
+}
+
 void SqlDatabase::get_valid_keys_with_print(std::set<int>& keys, const std::string& sql){        
     sqlite3_stmt* stmt = nullptr;
 

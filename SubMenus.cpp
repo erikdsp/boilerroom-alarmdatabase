@@ -98,19 +98,7 @@ void print_menu(SqlDatabase& database){
         database.print(sql);
     
     } else if (menu_type == USER) {
-        // Print short info about all customers and select one
-        std::cout << "Select a customer. 0) to exit menu:\n";
-        int customer { database.select_key("SELECT id, name FROM customer;") };
-        // 0 to exit menu
-        if (customer == 0) return;
-        // Select a user to print detailed info
-        std::cout << "Select a User RFID to print more info. 0) to exit menu:\n";
-        std::string sql_get_users { "SELECT id, rfid FROM user "
-                                    "INNER JOIN user_customer uc ON uc.user_id = user.id "
-                                    "WHERE uc.customer_id = "        };
-        sql_get_users += std::to_string(customer);
-        sql_get_users += ";";
-        int user { database.select_key(sql_get_users) };
+        int user { select_user(database) };
         // 0 to exit menu
         if (user == 0) return;
         // Print detailed info about selected user
@@ -133,15 +121,28 @@ void print_menu(SqlDatabase& database){
 
 void test_menu(SqlDatabase& database){
         std::string raw_input{};
+        int user { select_user(database) };
+        if (user == 0) return;
+        std::string sql { "SELECT passphrase FROM user WHERE user.id = " };
+        sql += std::to_string(user);
+        sql += ";";
+        std::string passphrase { database.get_string_from_database(sql) } ;        
         
-        User temp_user;
-        std::cout << "Get users. (awaiting implementation)\n";
-        std::cout << "Select user (1-5) -> ";
-        int user_id { get_number(1, 5) };
-        std::cout << "Print user no " << user_id << ". (awaiting implementation)\n";
-        std::cout << "Test alarm started. \n";
         while (1) {
-            std::cout << "Pass phrase: " << temp_user.passphrase << "\n"
+            std::cout << "Press y to test alarm, press n to abort -> ";
+            raw_input = get_string();
+            char c = raw_input.at(0);
+            if (c == 'y') {
+                break;
+            } else if (c == 'n') {
+                std::cout << "Test aborted\n";
+                return;
+            }
+        }
+
+        std::cout << "TEST ALARM STARTED\n";
+        while (1) {
+            std::cout << "Pass phrase: " << passphrase << "\n"
                       << "Press y to confirm -> ";
             raw_input = get_string();
             char c = raw_input.at(0);
@@ -150,4 +151,25 @@ void test_menu(SqlDatabase& database){
                 break;
             }
         }
+}
+
+int select_user(SqlDatabase& database){
+            // Print short info about all customers and select one
+        std::cout << "Select a customer. 0) to exit menu:\n";
+        int customer { database.select_key("SELECT id, name FROM customer;") };
+        // 0 to exit menu
+        int user{};
+        if (customer == 0) {
+            user = 0;
+        } else {
+            // Select a user to print detailed info
+            std::cout << "Select a User RFID. 0) to exit menu:\n";
+            std::string sql_get_users { "SELECT id, rfid FROM user "
+                                        "INNER JOIN user_customer uc ON uc.user_id = user.id "
+                                        "WHERE uc.customer_id = "        };
+            sql_get_users += std::to_string(customer);
+            sql_get_users += ";";
+            user = database.select_key(sql_get_users);
+        }
+        return user;
 }
