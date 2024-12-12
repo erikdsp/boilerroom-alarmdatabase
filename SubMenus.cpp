@@ -40,10 +40,10 @@ void add_menu(SqlDatabase& database){
         database.add_customer( database.create_customer() );    
 
     } else if (menu_type == USER) {
-
+        // 0 to exit menu
         int customer { select_customer(database) };
         {
-            bool submenu{true};
+            bool submenu{ customer > 0 };
             while (submenu) {
             std::cout << "Press + to add user, 0 when you are done -> ";  
             std::getline(std::cin, raw_input);
@@ -61,10 +61,10 @@ void add_menu(SqlDatabase& database){
         }
 
     } else if (menu_type == COMPONENT) {
-
+        // 0 to exit menu
         int customer { select_customer(database) };
         {
-            bool submenu{true};
+            bool submenu{ customer > 0 };
             while (submenu) {
             std::cout << "Press + to add component, 0 when you are done -> ";  
             std::getline(std::cin, raw_input);
