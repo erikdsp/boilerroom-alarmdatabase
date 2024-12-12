@@ -150,8 +150,10 @@ int SqlDatabase::select_key(const std::string& sql) {
     bool invalid{true};
     while (invalid) {
         input = get_number();
-        if ((invalid = (customer_keys.count(input) == 0))) {
-            std::cout << "Please select an option from the list or 0) to abort  -> ";
+        if (input == 0) { 
+            return 0; 
+        } else if ((invalid = (customer_keys.count(input) == 0))) {
+            std::cout << "Please select an option from the list or 0) to exit -> ";
         }
     }
     return input;

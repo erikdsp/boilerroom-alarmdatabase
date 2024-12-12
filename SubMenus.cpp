@@ -80,23 +80,34 @@ void print_menu(SqlDatabase& database){
     int menu_type { submenu_types() };
     
     if (menu_type == CUSTOMER) {
-        std::cout << "Print customers. (awaiting implementation)\n";
-        std::cout << "Select customer to print detailed information or press 0) to exit -> ";
-        int customer_id { get_number() };
-        std::cout << "Print customer no " << customer_id << ". (awaiting implementation)\n";
+        // Print short info about all customers and select one
+        std::cout << "Select a customer to print more info. 0) to exit menu:\n";
+        int customer { database.select_key("SELECT id, name FROM customer") };
+        // 0 to exit menu
+        if (customer == 0) return;
+        // Print detailed info about selected customer
+        std::string sql { "SELECT c.name, c.address, u.pin, u.rfid, u.passphrase "
+                          "FROM customer AS c, user AS u " 
+                          "INNER JOIN user_customer AS uc ON uc.user_id = u.id AND uc.customer_id = c.id "
+                          "WHERE c.id = "};
+        sql += std::to_string(customer);
+        sql += ";";
+        database.print(sql);
     
     } else if (menu_type == USER) {
-        User temp_user;
-        std::cout << "Get users. (awaiting implementation)\n";
-        std::cout << "Select user (1-5) -> ";
-        int user_id { get_number(1, 5) };
-        std::cout << "Print user no " << user_id << ". (awaiting implementation)\n";
+        // Select a customer to print connected users
+                User temp_user;
+                std::cout << "Get users. (awaiting implementation)\n";
+        // Print connected users
+        // Select a user to print detailed info
+        // print info
+                std::cout << "Select user (1-5) -> ";
+                int user_id { get_number(1, 5) };
+                std::cout << "Print user no " << user_id << ". (awaiting implementation)\n";
     
     } else if (menu_type == COMPONENT_TYPE) {
         database.print("SELECT * FROM component_type;");
-        // std::cout << "Get component types. (awaiting implementation)\n";
-        // std::cout << "Print component types. (awaiting implementation)\n";
-        // std::cout << "Test printing: " << database.get_last_inserted_rowid() << "\n";
+
     } else {
         std::cout << "Not a valid menu option\n";
     }
