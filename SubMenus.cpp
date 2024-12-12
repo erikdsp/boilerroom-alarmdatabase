@@ -82,31 +82,48 @@ void print_menu(SqlDatabase& database){
     if (menu_type == CUSTOMER) {
         // Print short info about all customers and select one
         std::cout << "Select a customer to print more info. 0) to exit menu:\n";
-        int customer { database.select_key("SELECT id, name FROM customer") };
+        int customer { database.select_key("SELECT id, name FROM customer;") };
         // 0 to exit menu
         if (customer == 0) return;
         // Print detailed info about selected customer
-        std::string sql { "SELECT c.name, c.address, u.pin, u.rfid, u.passphrase "
-                          "FROM customer AS c, user AS u " 
-                          "INNER JOIN user_customer AS uc ON uc.user_id = u.id AND uc.customer_id = c.id "
-                          "WHERE c.id = "};
+        std::string sql { "SELECT  cu.name AS Customer, cu.address AS Address, ct.type_name AS Component, "
+                          "co.location AS 'Install Location', co.serialnumber AS 'Serial Number' "
+                          "FROM component co "
+                          "INNER JOIN component_type ct ON ct.id = co.type_id "
+                          "INNER JOIN component_customer cc ON cc.component_id = co.id "
+                          "INNER JOIN customer cu ON cu.id = cc.customer_id "
+                          "WHERE cc.customer_id = "};
         sql += std::to_string(customer);
         sql += ";";
         database.print(sql);
     
     } else if (menu_type == USER) {
-        // Select a customer to print connected users
-                User temp_user;
-                std::cout << "Get users. (awaiting implementation)\n";
-        // Print connected users
+        // Print short info about all customers and select one
+        std::cout << "Select a customer. 0) to exit menu:\n";
+        int customer { database.select_key("SELECT id, name FROM customer;") };
+        // 0 to exit menu
+        if (customer == 0) return;
         // Select a user to print detailed info
-        // print info
-                std::cout << "Select user (1-5) -> ";
-                int user_id { get_number(1, 5) };
-                std::cout << "Print user no " << user_id << ". (awaiting implementation)\n";
+        std::cout << "Select a User RFID to print more info. 0) to exit menu:\n";
+        std::string sql_get_users { "SELECT id, rfid FROM user "
+                                    "INNER JOIN user_customer uc ON uc.user_id = user.id "
+                                    "WHERE uc.customer_id = "        };
+        sql_get_users += std::to_string(customer);
+        sql_get_users += ";";
+        int user { database.select_key(sql_get_users) };
+        // 0 to exit menu
+        if (user == 0) return;
+        // Print detailed info about selected user
+        std::string sql { "SELECT c.name AS Customer, u.rfid, u.pin, u.passphrase "
+                          "FROM customer AS c, user AS u " 
+                          "INNER JOIN user_customer AS uc ON uc.user_id = u.id AND uc.customer_id = c.id "
+                          "WHERE u.id = "};
+        sql += std::to_string(user);
+        sql += ";";
+        database.print(sql);
     
     } else if (menu_type == COMPONENT_TYPE) {
-        database.print("SELECT * FROM component_type;");
+        database.print("SELECT id, type_name AS 'Component Type' FROM component_type;");
 
     } else {
         std::cout << "Not a valid menu option\n";
