@@ -5,6 +5,10 @@
 #include <iostream>
 #include <regex>
 
+
+/**
+ * All input functions use std::getline
+ */
 int get_number();
 int get_number(int min, int max);
 unsigned get_unsigned_number();

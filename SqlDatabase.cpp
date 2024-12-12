@@ -44,7 +44,9 @@ void SqlDatabase::initialize_empty_database(){
 
 }
 
-
+/**
+ *  SQL interfacing
+ */
 void SqlDatabase::execute_sql(const std::string& sql, const std::string& success_message){
     char* errMsg = 0;
     int rc = sqlite3_exec(database, sql.c_str(), nullptr, 0, &errMsg);
@@ -67,7 +69,27 @@ void SqlDatabase::execute_sql_with_callback(const std::string& sql, const std::s
     }
 }
 
+int SqlDatabase::get_last_inserted_rowid(){
+    std::string sql = "SELECT last_insert_rowid();";
+    sqlite3_stmt* stmt = nullptr;
+    int rowid{};
+    if (sqlite3_prepare_v2(database, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "SQL error: " << sqlite3_errmsg(database) << "\n";
+    } else {
+        // read values for each row
+        while (sqlite3_step(stmt) == SQLITE_ROW) {            
+            rowid = sqlite3_column_int(stmt, 0);
+        }
+    }
+    sqlite3_finalize(stmt);
+    return rowid;
+}
 
+
+
+/** 
+ *  Create functions
+ */
 ComponentType SqlDatabase::create_component_type() {
     ComponentType temp;
     std::cout << "Please enter name of component type -> ";
@@ -96,13 +118,18 @@ Customer SqlDatabase::create_customer() {
     return std::move(temp);
 }
 
-
+/** 
+ *  Add functions
+ */
 void SqlDatabase::add_component_type ( const ComponentType& ct){
     std::string sql = "INSERT INTO component_type (type_name) VALUES ('" + ct.type_name + "');";
     std::string message = "Component type " + ct.type_name + " added to database";
     execute_sql(sql, message);
 }
 
+/**
+ * TODO: Validate @param customer against database before inserting
+ */
  void SqlDatabase::add_component( const Component& c, int customer ){
     // insert into component
     std::string sql = "INSERT INTO component (type_id, location, serialnumber) VALUES ('" 
@@ -118,6 +145,9 @@ void SqlDatabase::add_component_type ( const ComponentType& ct){
     execute_sql(sql, message);
  }
 
+/**
+ * TODO: Validate @param customer against database before inserting
+ */
 void SqlDatabase::add_user( const User& u, int customer ){
     // insert into user
     std::string sql = "INSERT INTO user (pin, rfid, passphrase) VALUES ('" 
@@ -141,12 +171,14 @@ void SqlDatabase::add_customer( const Customer& cu ){
 }
 
 
+/** 
+ *  Select and print functions
+ *   example sql syntax: SELECT id, name FROM customer;
+ */
 int SqlDatabase::select_key(const std::string& sql) {
     int input{};
     std::set<int> customer_keys;
-    // example sql: SELECT id, name FROM customer;
     get_valid_keys_with_print(customer_keys, sql);
-    // std::cout << "Available options:\n";
     std::cout << "Please select -> ";
     bool invalid{true};
     while (invalid) {
@@ -160,21 +192,7 @@ int SqlDatabase::select_key(const std::string& sql) {
     return input;
 }
 
-int SqlDatabase::get_last_inserted_rowid(){
-    std::string sql = "SELECT last_insert_rowid();";
-    sqlite3_stmt* stmt = nullptr;
-    int rowid{};
-    if (sqlite3_prepare_v2(database, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-        std::cerr << "SQL error: " << sqlite3_errmsg(database) << "\n";
-    } else {
-        // read values for each row
-        while (sqlite3_step(stmt) == SQLITE_ROW) {            
-            rowid = sqlite3_column_int(stmt, 0);
-        }
-    }
-    sqlite3_finalize(stmt);
-    return rowid;
-}
+
 
 int SqlDatabase::print_callback(void *data, int argc, char **arg_value, char **az_col_name){
     std::cout << "--------------------------------------------------------------------------------------------\n";
@@ -185,8 +203,13 @@ int SqlDatabase::print_callback(void *data, int argc, char **arg_value, char **a
     return 0;
 }
 
+/**
+ *  TODO: Improve validation: 
+ *        match SELECT case insensitive, 
+ *        terminate string at first ; to avoid SQL abuse of function
+ */
 void SqlDatabase::print(const std::string& sql){
-    // validate sql     TODO: learn how to match case insensitive
+    // validate sql
     std::regex e(R"(^SELECT)");             // Regular expression pattern for SELECT
     int valid = std::regex_search(sql, e);  // Search the string against the regex
     if (!valid) {
@@ -196,6 +219,9 @@ void SqlDatabase::print(const std::string& sql){
     execute_sql_with_callback(sql, "");
 }
 
+/** 
+ *  Functions to get values from database
+ */
 std::string SqlDatabase::get_string_from_database(const std::string& sql) {
     sqlite3_stmt* stmt = nullptr;
     std::string text;
@@ -241,53 +267,3 @@ void SqlDatabase::get_valid_keys_with_print(std::set<int>& keys, const std::stri
     }
     sqlite3_finalize(stmt);
 }
-
-/* 
-void SqlDatabase::select_component_type() {
-    std::set<int> keys;
-    std::vector<std::map<int, std::string>> component_types;
-    sqlite3_stmt* stmt = nullptr;
-    std::string sql = "SELECT id, type_name FROM component_type;";
-
-        if (sqlite3_prepare_v2(database, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-            std::cerr << "SQL error: " << sqlite3_errmsg(database) << "\n";
-            sqlite3_finalize(stmt);
-        } else {
-            while (sqlite3_step(stmt) == SQLITE_ROW) {            
-                std::map<int, std::string> row;
-                int key = sqlite3_column_int(stmt, 0);
-                keys.insert(key);
-                const char* p_to_value = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
-                std::string value { (p_to_value != NULL) ? p_to_value : "null" };
-                row.insert({key, value});
-                component_types.push_back(row);
-            }
-        sqlite3_finalize(stmt);
-        // std::cout << keys.count(4) << "\n";
-        // std::cout << "CT1: " << component_types.size() << "\n";
-    }
-}
- */
-
-// Select data within a time range
-/* 
-bool select_time_range(sqlite3* db, vector<map<string, int>>& time_ref, const string& start_time, const string& end_time) {
-    sqlite3_stmt* stmt = nullptr;
-    string sql = "SELECT * FROM EventLog WHERE event_time >= '" + start_time + "' AND event_time <= '" + end_time + "';";
-
-    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
-        while (sqlite3_step(stmt) == SQLITE_ROW) {
-            map<string, int> row;
-            const char* time_text = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
-            int value = sqlite3_column_int(stmt, 2);
-
-            row[time_text] = value;
-            time_ref.push_back(row);
-        }
-        sqlite3_finalize(stmt);
-        return true;
-    }
-    sqlite3_finalize(stmt);
-    return false;
-}
- */

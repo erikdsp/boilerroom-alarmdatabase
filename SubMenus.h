@@ -12,11 +12,13 @@ enum menu_type {
     COMPONENT_TYPE
 };
 
+int select_submenu();
 int select_user(SqlDatabase& database);
 int select_customer(SqlDatabase& database);
-int submenu_types();
 void add_menu(SqlDatabase& database);
 void print_menu(SqlDatabase& database);
 void test_menu(SqlDatabase& database);
+
+
 
 #endif

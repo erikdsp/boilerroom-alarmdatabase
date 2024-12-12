@@ -24,6 +24,12 @@ class SqlDatabase{
     void execute_sql(const std::string& sql, const std::string& success_message = "");
     void execute_sql_with_callback(const std::string& sql, const std::string& success_message = "");
     static int print_callback(void *data, int argc, char **arg_value, char **az_col_name);
+    int get_last_inserted_rowid();
+    /**
+     * @param keys pass by reference will alter value  
+     * @param sql - syntax example: SELECT id, <parameter> FROM <table> 
+     */
+    void get_valid_keys_with_print(std::set<int>& keys, const std::string& sql);
 
     public:
     SqlDatabase(const char* db_name);
@@ -37,11 +43,8 @@ class SqlDatabase{
     void add_user( const User& u, int customer );
     void add_customer( const Customer& cu );
     int select_key( const std::string& sql );
-    int get_last_inserted_rowid();
     void print(const std::string& sql);
     std::string get_string_from_database(const std::string& sql);
-    // @param keys for keys from query, @param sql - syntax example: SELECT id, <parameter> FROM <table>
-    void get_valid_keys_with_print(std::set<int>& keys, const std::string& sql);
 
 };
 
