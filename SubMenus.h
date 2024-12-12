@@ -8,10 +8,12 @@
 enum menu_type {
     CUSTOMER = 1,
     USER,
+    COMPONENT,
     COMPONENT_TYPE
 };
 
 int select_user(SqlDatabase& database);
+int select_customer(SqlDatabase& database);
 int submenu_types();
 void add_menu(SqlDatabase& database);
 void print_menu(SqlDatabase& database);

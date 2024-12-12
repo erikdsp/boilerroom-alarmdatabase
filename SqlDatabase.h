@@ -31,9 +31,10 @@ class SqlDatabase{
 
     ComponentType create_component_type();
     Component create_component();
+    Customer create_customer();
     void add_component_type ( const ComponentType& ct);
-    void add_component( const Component& c );
-    void add_user( const User& u );
+    void add_component( const Component& c, int customer );
+    void add_user( const User& u, int customer );
     void add_customer( const Customer& cu );
     int select_key( const std::string& sql );
     int get_last_inserted_rowid();

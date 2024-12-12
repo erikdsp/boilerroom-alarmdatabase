@@ -87,6 +87,15 @@ Component SqlDatabase::create_component(){
     return std::move(temp);
 }
 
+Customer SqlDatabase::create_customer() {
+    Customer temp;
+    std::cout << "Please enter name -> ";
+    temp.name = get_string();
+    std::cout << "Please enter address -> ";
+    temp.address = get_string();
+    return std::move(temp);
+}
+
 
 void SqlDatabase::add_component_type ( const ComponentType& ct){
     std::string sql = "INSERT INTO component_type (type_name) VALUES ('" + ct.type_name + "');";
@@ -94,11 +103,7 @@ void SqlDatabase::add_component_type ( const ComponentType& ct){
     execute_sql(sql, message);
 }
 
- void SqlDatabase::add_component( const Component& c ){
-    // select linked table in database
-    std::cout << "Select a customer to add component:\n";
-    int customer {select_key( "SELECT id, name FROM customer;") };
-
+ void SqlDatabase::add_component( const Component& c, int customer ){
     // insert into component
     std::string sql = "INSERT INTO component (type_id, location, serialnumber) VALUES ('" 
                  + std::to_string(c.type) + "', '" + c.location + "', '" + c.serialnumber + "');";
@@ -113,11 +118,7 @@ void SqlDatabase::add_component_type ( const ComponentType& ct){
     execute_sql(sql, message);
  }
 
-void SqlDatabase::add_user( const User& u ){
-    // select linked table in database
-    std::cout << "Select a customer to add user:\n";
-    int customer {select_key( "SELECT id, name FROM customer;") };
-
+void SqlDatabase::add_user( const User& u, int customer ){
     // insert into user
     std::string sql = "INSERT INTO user (pin, rfid, passphrase) VALUES ('" 
                  + u.pin + "', '" + u.rfid + "', '" + u.passphrase + "');";
